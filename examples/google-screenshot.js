@@ -27,9 +27,12 @@ const puppeteer = require('puppeteer');
                     .singleNodeValue;
 
                 if (featureArticle == null) {
+                    console.log('Blocked!');
+                    
                     resolve('Blocked!');
                     // return 'Blocked!';
                 } else {
+                    console.log(featureArticle.textContent);
                     resolve(featureArticle.textContent);
                     // return featureArticle.textContent;
                 }
