@@ -1,19 +1,43 @@
 const puppeteer = require('puppeteer');
 
-(async() => {
+(async () => {
 
     const browser = await puppeteer.launch({
         args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox'
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
         ]
     });
 
     const page = await browser.newPage();
 
-    await page.goto('https://www.google.com/', {waitUntil: 'networkidle'});
+    await page.goto('https://www.sahibinden.com/ilan/emlak-konut-satilik-b.duzu-metrobuse-5dk-125m2-tertemiz-daire-iskanli-yeni-yapi-654470042/detay', { waitUntil: 'networkidle' });
 
-    await page.screenshot({path: 'google.png'});
+    await page.evaluate(() => {
+        Promise((resolve, reject) => {
+            setInterval(() => {
+                const featureArticle = document
+                    .evaluate(
+                        '//*[@id="classifiedDetail"]/div[1]/div[1]/h1',
+                        document,
+                        null,
+                        XPathResult.FIRST_ORDERED_NODE_TYPE,
+                        null
+                    )
+                    .singleNodeValue;
+
+                if (featureArticle == null) {
+                    resolve('Blocked!');
+                    // return 'Blocked!';
+                } else {
+                    resolve(featureArticle.textContent);
+                    // return featureArticle.textContent;
+                }
+            }, 1000);
+        });
+    });
+
+    // await page.screenshot({ path: 'google.png' });
 
     browser.close();
 
